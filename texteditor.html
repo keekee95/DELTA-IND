@@ -1,0 +1,212 @@
+<html>
+
+<head>
+
+     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+     <title>Text editor</title>
+
+     <style rel="stylesheet" type="text/css">
+	
+	    .text_edit 
+		{
+			width: 500px;
+			height: 300px;
+			resize: none;
+		}
+	
+		#view_text 
+		{
+				width: 500px;
+		}
+	
+     </style>
+	 
+	<script type="text/javascript">
+
+        function view_text () {
+
+            // Find html elements.
+
+            var textArea = document.getElementById('my_text');
+
+            var div = document.getElementById('view_text');
+
+             
+
+            // Put the text in a variable so we can manipulate it.
+
+            var text = textArea.value;
+			
+			while( text.search(/\[d\]/i)!= -1)
+			{
+				if( text.search(/\[\/d\]/i) == -1)
+				{
+					text = text + '[/d]';
+				}
+				
+				var begin = text.substr(0,text.search(/\[d\]/i));
+				var selection = text.substr(text.search(/\[d\]/gi),text.search(/\[\/d\]/i)-text.search(/\[d\]/i));
+				var end = text.substr(text.search(/\[\/d\]/i));
+			 
+				for (var i=0 ; i < selection.length ; i=i+2)
+				{
+					selection = selection.substr(0,i) + selection.charAt(i).toUpperCase() + selection.slice(i+1).toLowerCase();
+				}	
+				
+				text = begin + selection + end ;
+				text = text.replace(/\[d\]/i, "");
+				text = text.replace(/\[\/d\]/i, "");
+				
+			}
+			
+
+            // Make sure html and php tags are unusable by disabling < and >.
+
+            text = text.replace(/\</gi, "<");
+            text = text.replace(/\>/gi, ">");
+
+             
+
+            // Exchange newlines for <br />
+
+            text = text.replace(/\n/gi, "<br />");
+
+             
+
+            // Basic BBCodes.
+
+            text = text.replace(/\[b\]/gi, "<b>");
+
+            text = text.replace(/\[\/b\]/gi, "</b>");
+
+             
+            text = text.replace(/\[i\]/gi, "<i>");
+
+            text = text.replace(/\[\/i\]/gi, "</i>");
+
+             
+
+            text = text.replace(/\[u\]/gi, "<u>");
+
+            text = text.replace(/\[\/u\]/gi, "</u>");
+  
+        text = '<p style = "color:' + document.getElementById("myColor").value + '; font-size:' + document.getElementById("mySize").value + 'px ; font-family:' + document.getElementById("myFont").value + ';">' + text + '</p>';
+            
+            // Print the text in the div made for it.
+			
+			/*div.style.color = document.getElementById("myColor").value;
+			
+			div.style.fontSize = document.getElementById("mySize").value + 'px';
+			
+			div.style.fontFamily = document.getElementById("myFont").value;*/
+			
+            div.innerHTML = div.innerHTML + text;
+			
+			textArea.value = "";
+			
+
+        }
+
+         
+
+        function mod_selection (val1,val2) {
+
+            // Get the text area
+
+            var textArea = document.getElementById('my_text');
+		
+         
+            // Do we even have a selection?
+
+            if (typeof(textArea.selectionStart) != "undefined") {
+			
+			
+			// Split the text in three pieces - the selection, and what comes before and after.
+			
+				var begin = textArea.value.substr(0, textArea.selectionStart);
+
+                var selection = textArea.value.substr(textArea.selectionStart, textArea.selectionEnd - textArea.selectionStart);
+
+                var end = textArea.value.substr(textArea.selectionEnd);
+			
+				// Insert the tags between the three pieces of text.
+
+				textArea.value = begin + val1 + selection + val2 + end;    
+
+            }
+
+        }
+		
+		function clear_pg()
+		{
+			location.reload();
+		}
+
+    </script>
+
+      
+
+</head>
+
+
+<body>
+
+     
+
+    <!-- Knapper -->
+
+    <input type="button" value="B" onclick="mod_selection('[b]','[/b]')" />
+
+    <input type="button" value="I" onclick="mod_selection('[i]','[/i]')" />
+
+    <input type="button" value="U" onclick="mod_selection('[u]','[/u]')" />
+	
+	<input type="button" value="DI" onclick="mod_selection('[i][d]','[/d][/i]')" />
+	
+	<input type="button" value="DB" onclick="mod_selection('[b][d]','[/d][/b]')" />
+	
+	Color: <input type="color" id="myColor">
+	
+	Font Size: <input id="mySize" type="range" value="20">
+	
+<select id="myFont">
+<option value="Times New Roman"selected>Times New Roman</option>
+<option value="Calibri">Calibri</option>
+<option value="Bradley Hand ITC">Bradley Hand ITC</option>
+<option value="Freestyle Script">Freestyle Script</option>
+</select>
+
+    <br />
+
+     
+
+    <!-- Text area -->
+
+    <textarea class="text_edit" id="my_text"></textarea>
+
+    <br />
+
+     
+
+  <!-- Submit button -->
+
+    <input type="button" value="New Para" onclick="view_text()" />
+	<input type="button" value="Clear Page" onclick="clear_pg()" />
+     
+
+    <!-- Empty div to put the text in -->
+
+    <div id="view_text">
+
+    </div>
+
+ 
+
+</body>
+
+</html>
+
+
+	 
+
