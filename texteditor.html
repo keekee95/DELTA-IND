@@ -38,8 +38,10 @@
 
             // Put the text in a variable so we can manipulate it.
 
+
             var text = textArea.value;
 			
+	//to change all the text bettween [d] and [/d] to having alternate uppercase and lowercase letters		
 			while( text.search(/\[d\]/i)!= -1)
 			{
 				if( text.search(/\[\/d\]/i) == -1)
@@ -184,7 +186,7 @@
 
      
 
-  <!-- Submit button -->
+  <!-- Submit buttons -->
 
     <input type="button" value="New Para" onclick="view_text()" />
 	<input type="button" value="Clear Page" onclick="clear_pg()" />
