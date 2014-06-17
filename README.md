@@ -6,3 +6,5 @@ Dept.: CSE
 
 
 WEB DEV TASK 1 
+
+jsfiddle link: http://jsfiddle.net/qBsA6/
